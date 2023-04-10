@@ -98,3 +98,9 @@
   top: calc(50% - 1.25em);
   left: calc(50% - 1.25em);
 }
+
+input,
+select,
+textarea {
+  @apply rounded border p-2 outline-none ring-indigo-300 focus:ring;
+}
