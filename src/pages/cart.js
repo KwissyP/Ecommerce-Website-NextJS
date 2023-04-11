@@ -7,6 +7,8 @@ import { XCircleIcon } from '@heroicons/react/outline'
 import { formatCurrency } from '../utils/format';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function CartScreen() {
     const router = useRouter();
@@ -21,9 +23,14 @@ function CartScreen() {
 
     const subtotal = cartItems.reduce((a, c) => a + c.quantity * c.sale_price, 0);
 
-    const updateCartHandler = (item, qty) => {
+    const updateCartHandler = async (item, qty) => {
         const quantity = Number(qty);
+        const { data } = await axios.get(`api/products/${item._id}`);
+        if (data.list_price < quantity) {
+            return toast.error(`Sorry, the product (${data.name}) is out of stock`)
+        }
         dispatch({ type: 'CART_ADD_ITEM', payload: { ...item, quantity } });
+        toast.success('Product updated in the cart successfully');
     }
 
     return (

@@ -2,33 +2,34 @@
 import React, { useContext } from 'react';
 import Layout from '../../components/Layout';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import  Link  from 'next/link';
 import { formatCurrency } from '../../utils/format';
 import { Store } from '../../utils/Store';
+import Product from '../../../models/Product';
+import db from '@/utils/db';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-export default function ProductScreen({ products }) {
+export default function ProductScreen(props) {
+  const { product } = props;
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
-  const { query } = useRouter();
-  const { id } = query;
-  const product = products.find((x) => x.id.toString() === id);
   if (!product) {
-    return <div>Product not found! Sorry :(</div>;
+    return <Layout title='Product Not Found'>Product not found! Sorry :(</Layout>;
   }
 
-  const addToCardHandler = () => {
+  const addToCardHandler =async() => {
     const existItem = state.cart.cartItems.find((x) => x.id === product.id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
+    const { data } = await axios.get(`/api/products/${product._id}`)
 
-    if (Math.round(product.list_price) < quantity) {
-      alert(`Sorry, the product (${product.name}) is out of stock`)
-      return;
+    if (Math.round(data.list_price) < quantity) {
+      return toast.error(`Sorry, the product (${data.name}) is out of stock`);
     }
 
     dispatch({ type: 'CART_ADD_ITEM', payload: { ...product, quantity }});
     router.push('/cart');
-  }
+  };
 
   return (
     <Layout title={product.name}>
@@ -82,23 +83,46 @@ export default function ProductScreen({ products }) {
   );
 }
 
-export async function getStaticProps() {
-  const { data } = await axios.get(
-    'https://example-data.draftbit.com/products?_limit=20'
-  );
+export async function getServerSideProps(context) {
+  const { params } = context;
+  const { id } = params;
+
+  if(isNaN(id)){
+    return {
+      props: {
+        product: null
+      }
+    }
+  }
+
+  await db.connect();
+  const product = await Product.findOne({ id }).lean();
+  await db.disconnect();
+
   return {
     props: {
-      products: data,
-    },
-  };
+      product: product ? db.convertDocToObj(product) : null,
+    }
+  }
 }
 
-export async function getStaticPaths() {
-  const { data } = await axios.get(
-    'https://example-data.draftbit.com/products?_limit=20'
-  );
-  const paths = data.map((product) => ({
-    params: { id: product.id.toString() },
-  }));
-  return { paths, fallback: false };
-}
+// export async function getStaticProps() {
+//   const { data } = await axios.get(
+//     'https://example-data.draftbit.com/products?_limit=20'
+//   );
+//   return {
+//     props: {
+//       products: data,
+//     },
+//   };
+// }
+
+// export async function getStaticPaths() {
+//   const { data } = await axios.get(
+//     'https://example-data.draftbit.com/products?_limit=20'
+//   );
+//   const paths = data.map((product) => ({
+//     params: { id: product.id.toString() },
+//   }));
+//   return { paths, fallback: false };
+// }

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { formatCurrency } from '../utils/format';
 
-export default function ProductItem({ product }) {
+export default function ProductItem({ product, addToCartHandler }) {
     const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -46,7 +46,7 @@ export default function ProductItem({ product }) {
                 </Link>
                 <p className="font-bold">{product.brand}</p>
                 <p>{formatCurrency(product.sale_price)}</p>
-                <button className="primary-button" type="button">
+                <button className="primary-button" type="button" onClick={() => addToCartHandler(product)}>
                     Add to cart
                 </button>
             </div>
