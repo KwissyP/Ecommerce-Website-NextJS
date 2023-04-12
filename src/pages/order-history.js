@@ -2,7 +2,7 @@ import Layout from '@/components/Layout';
 import { getError } from '@/utils/error';
 import axios from 'axios';
 import Link from 'next/link';
-import React, { useEffect } from 'react'
+import React, { useEffect, useReducer } from 'react'
 
 function reducer(state, action) {
     switch (action.type) {
@@ -37,7 +37,7 @@ function OrderHistoryScreen() {
     }, [])
     return (
         <Layout title="Order History">
-            <h1>Order History</h1>
+            <h1 className='mb-4 text-xl'>Order History</h1>
             {loading ? (
                 <div>Loading...</div>
             ) : error ? (
