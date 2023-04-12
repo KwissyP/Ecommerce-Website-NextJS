@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Layout from '../components/Layout';
 import ProductItem from '../components/ProductItem';
 import Product from '../../models/Product';
@@ -6,8 +7,11 @@ import { useContext } from 'react';
 import { Store } from '@/utils/Store';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import Link from 'next/link';
 
-export default function Home({ products }) {
+export default function Home({ products, featuredProducts }) {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
 
@@ -27,6 +31,18 @@ export default function Home({ products }) {
 
   return (
     <Layout title="Home Page">
+      <Carousel showThumbs={false} autoPlay>
+        <Link href="/product/9" className='flex'>
+          <img src="./assets/nike.png" alt="Nike" />
+        </Link>
+        <Link href="/product/16" className='flex'>
+          <img src="./assets/converse.png" alt="Converse" />
+        </Link>
+        <Link href="/product/18" className='flex'>
+          <img src="./assets/goyard.png" alt="Goyard" />
+        </Link>
+      </Carousel>
+      <h2 className="h2 my-4">Latest Products</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {products.map((product) => (
           <ProductItem key={product.id} product={product} addToCartHandler={addToCartHandler} />
@@ -39,8 +55,10 @@ export default function Home({ products }) {
 export async function getServerSideProps() {
   await db.connect();
   const products = await Product.find().lean();
+  const featuredProducts = await Product.find({ isFeatured: true }).lean();
   return {
     props:{
+      featuredProducts: featuredProducts.map(db.convertDocToObj),
       products: products.map(db.convertDocToObj)
     },
   }

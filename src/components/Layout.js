@@ -30,7 +30,7 @@ export default function Layout({ title, children }) {
                 <title>{title ? title + ' - Azeus' : 'Azeus'}</title>
                 <meta name="description" content="E-commerce Website" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
-                <link rel="icon" href="/asos.png" />
+                <link rel="icon" href="./assets/asos.png" />
             </Head>
             <ToastContainer position="bottom-center" limit={1} />
             <div className='flex min-h-screen flex-col justify-between'>
