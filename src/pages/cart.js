@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { Store } from "../utils/Store"
 import Layout from '@/components/Layout';
 import Link from 'next/link';
-import { XCircleIcon } from '@heroicons/react/outline'
+import XCircleIcon from '@heroicons/react/24/outline/XCircleIcon'
 import { formatCurrency } from '../utils/format';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
