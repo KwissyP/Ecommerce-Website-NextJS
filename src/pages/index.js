@@ -32,17 +32,17 @@ export default function Home({ products, featuredProducts }) {
   return (
     <Layout title="Home Page">
       <Carousel showThumbs={false} autoPlay>
-        <Link href="/product/9" className='flex'>
-          <img src="./assets/nike.png" alt="Nike" />
-        </Link>
-        <Link href="/product/16" className='flex'>
-          <img src="./assets/converse.png" alt="Converse" />
-        </Link>
-        <Link href="/product/18" className='flex'>
-          <img src="./assets/goyard.png" alt="Goyard" />
-        </Link>
-      </Carousel>
-      <h2 className="h2 my-4">Latest Products</h2>
+  <Link href="/product/9" className='flex'>
+    <img src="./assets/nike.png" alt="Nike" className="w-96 h-96 object-contain" />
+  </Link>
+  <Link href="/product/16" className='flex'>
+    <img src="./assets/converse.png" alt="Converse" className="w-96 h-96 object-contain" />
+  </Link>
+  <Link href="/product/18" className='flex'>
+    <img src="./assets/goyard.png" alt="Goyard" className="w-96 h-96 object-contain" />
+  </Link>
+</Carousel>
+      <h2 className="text-lg my-4 font-bold">Latest Products :</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
         {products.map((product) => (
           <ProductItem key={product.id} product={product} addToCartHandler={addToCartHandler} />
