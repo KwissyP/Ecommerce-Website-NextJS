@@ -11,7 +11,7 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Link from 'next/link';
 
-export default function Home({ products, featuredProducts }) {
+export default function Home({ products }) {
   const { state, dispatch } = useContext(Store);
   const { cart } = state;
 
@@ -55,10 +55,8 @@ export default function Home({ products, featuredProducts }) {
 export async function getServerSideProps() {
   await db.connect();
   const products = await Product.find().lean();
-  const featuredProducts = await Product.find({ isFeatured: true }).lean();
   return {
     props:{
-      featuredProducts: featuredProducts.map(db.convertDocToObj),
       products: products.map(db.convertDocToObj)
     },
   }

@@ -61,8 +61,8 @@ export default function Search(props) {
         if (sort) query.sort = sort;
         if (category) query.category = category;
         if (brand) query.brand = brand;
-        if (price) query.price = price;
-        if (rating) query.rating = rating;
+        if (price) query.sale_price = price;
+        if (rating) query.average_product_rating = rating;
         if (min) query.min ? query.min : query.min === 0 ? 0 : min;
         if (max) query.max ? query.max : query.max === 0 ? 0 : max;
 
